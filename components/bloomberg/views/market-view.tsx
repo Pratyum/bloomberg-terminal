@@ -23,11 +23,13 @@ export function MarketView({ isDarkMode }: MarketViewProps) {
     );
   }
 
-  if (error) {
+  if (error || !data) {
     return (
       <div className="p-8 text-center">
         <p className="text-red-500 font-mono">Error loading market data</p>
-        <p className="text-sm mt-2">{error instanceof Error ? error.message : "Unknown error"}</p>
+        <p className="text-sm mt-2">
+          {error instanceof Error ? error.message : "No data available"}
+        </p>
       </div>
     );
   }

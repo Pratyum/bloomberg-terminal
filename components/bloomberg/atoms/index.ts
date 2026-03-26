@@ -20,7 +20,7 @@ export const isShortcutsHelpOpenAtom = atom(false);
 export const currentViewAtom = atom<"market" | "news" | "movers" | "volatility" | "rmi">("market");
 
 // RMI view state atoms
-export const rmiSelectedRegionAtom = atom<"americas" | "emea" | "asiaPacific">("americas");
+export const rmiSelectedRegionAtom = atom<"india" | "emea" | "asiaPacific">("india");
 export const rmiSelectedSecurityAtom = atom<string>("");
 export const rmiBenchmarkIndexAtom = atom<string | undefined>("SPX:IND");
 export const rmiTimeRangeAtom = atom<"1D" | "1W" | "1M" | "3M" | "YTD" | "1Y">("1M");

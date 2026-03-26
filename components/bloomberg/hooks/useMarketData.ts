@@ -116,7 +116,7 @@ export function useAllMarketData() {
 /**
  * Hook for fetching market data by region
  */
-export function useRegionMarketData(regions: string[] = ["americas", "emea", "asiaPacific"]) {
+export function useRegionMarketData(regions: string[] = ["india", "emea", "asiaPacific"]) {
   const [isRealTimeEnabled] = useAtom(isRealTimeEnabledAtom);
 
   // Use useQueries for multiple related queries
@@ -261,7 +261,7 @@ export function useMarketDataUpdates() {
     const newUpdatedSparklines: Record<string, boolean> = {};
 
     // Compare with previous data to highlight changes
-    for (const region of ["americas", "emea", "asiaPacific"]) {
+    for (const region of ["india", "emea", "asiaPacific"]) {
       if (!previousData || !currentData) continue;
 
       const prevRegionData = previousData[region] as MarketItem[] | undefined;
@@ -333,7 +333,7 @@ export function useMarketDataQuery() {
   const [isFromRedis] = useAtom(isFromRedisAtom);
 
   // Create selectors for specific data views
-  const getAmericasData = useCallback(() => getRegionData("americas"), [getRegionData]);
+  const getAmericasData = useCallback(() => getRegionData("india"), [getRegionData]);
   const getEmeaData = useCallback(() => getRegionData("emea"), [getRegionData]);
   const getAsiaPacificData = useCallback(() => getRegionData("asiaPacific"), [getRegionData]);
 

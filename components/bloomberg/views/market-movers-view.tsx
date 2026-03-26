@@ -23,17 +23,17 @@ import { Sparkline } from "../ui/sparkline";
 
 interface MarketIndex {
   id: string;
-  num: string;
-  rmi: string;
+  num?: string;
+  rmi?: string;
   value: number;
   change: number;
   pctChange: number;
-  avat: number;
+  avat?: number | null;
   time: string;
-  ytd: number;
-  ytdCur: number;
-  sparkline1?: number[];
-  sparkline2?: number[];
+  ytd?: number | null;
+  ytdCur?: number | null;
+  sparkline1?: number[] | null;
+  sparkline2?: number[] | null;
   twoDayData?: { date: string; value: number }[];
   region?: string;
 }
@@ -41,8 +41,8 @@ interface MarketIndex {
 interface MarketMoversViewProps {
   isDarkMode: boolean;
   onBack: () => void;
-  marketData: {
-    americas: MarketIndex[];
+  marketData?: {
+    india: MarketIndex[];
     emea: MarketIndex[];
     asiaPacific: MarketIndex[];
     lastUpdated?: string;
@@ -63,7 +63,7 @@ export default function MarketMoversView({
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [minMove, setMinMove] = useState<number>(0);
   const [showRegions, setShowRegions] = useState<Record<string, boolean>>({
-    americas: true,
+    india: true,
     emea: true,
     asiaPacific: true,
   });
@@ -75,19 +75,19 @@ export default function MarketMoversView({
     // Combine all regions into a single array
     const allIndices: MarketIndex[] = [];
 
-    if (marketData.americas) {
-      for (const index of marketData.americas) {
+    if (marketData?.india) {
+      for (const index of marketData.india) {
         allIndices.push({ ...index, region: "Americas" });
       }
     }
 
-    if (marketData.emea) {
+    if (marketData?.emea) {
       for (const index of marketData.emea) {
         allIndices.push({ ...index, region: "EMEA" });
       }
     }
 
-    if (marketData.asiaPacific) {
+    if (marketData?.asiaPacific) {
       for (const index of marketData.asiaPacific) {
         allIndices.push({ ...index, region: "Asia/Pacific" });
       }
@@ -200,12 +200,12 @@ export default function MarketMoversView({
         <span>Regions:</span>
         <div className="flex items-center gap-1">
           <Checkbox
-            id="americas"
-            checked={showRegions.americas}
-            onCheckedChange={() => handleRegionToggle("americas")}
+            id="india"
+            checked={showRegions.india}
+            onCheckedChange={() => handleRegionToggle("india")}
             className="h-3 w-3 rounded-none border-gray-500 data-[state=checked]:bg-gray-500"
           />
-          <label htmlFor="americas">Americas</label>
+          <label htmlFor="india">Americas</label>
         </div>
         <div className="flex items-center gap-1">
           <Checkbox
@@ -330,7 +330,9 @@ export default function MarketMoversView({
                   </TableCell>
                   <TableCell
                     className={`px-2 py-1 text-right text-xs ${
-                      item.ytd > 0 ? `text-[${colors.positive}]` : `text-[${colors.negative}]`
+                      (item.ytd ?? 0) > 0
+                        ? `text-[${colors.positive}]`
+                        : `text-[${colors.negative}]`
                     } hidden md:table-cell`}
                   >
                     {typeof item.ytd === "number" ? `${item.ytd.toFixed(2)}%` : "N/A"}

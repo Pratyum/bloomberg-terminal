@@ -17,7 +17,7 @@ export async function refreshMarketData(): Promise<void> {
       const marketData = await fetchAllMarketData();
 
       const totalIndices =
-        marketData.americas.length + marketData.emea.length + marketData.asiaPacific.length;
+        marketData.india.length + marketData.emea.length + marketData.asiaPacific.length;
 
       if (totalIndices < 5) {
         throw new Error("Not enough data received from Yahoo Finance");

@@ -42,28 +42,3 @@ export function calculateYTDChange(currentValue: number, startOfYearValue: numbe
   if (startOfYearValue === 0) return 0;
   return ((currentValue - startOfYearValue) / startOfYearValue) * 100;
 }
-
-/**
- * Generate mock historical data for a given number of days
- * @param days Number of days of historical data to generate
- * @param baseValue Base value to start from
- * @param volatility Volatility factor (0-1)
- * @returns Array of daily values
- */
-export function generateHistoricalData(
-  days: number,
-  baseValue: number,
-  volatility = 0.02
-): number[] {
-  const data: number[] = [];
-  let currentValue = baseValue;
-
-  for (let i = 0; i < days; i++) {
-    // Random walk with drift
-    const change = currentValue * (Math.random() * volatility * 2 - volatility);
-    currentValue += change;
-    data.push(Math.max(0.01, currentValue)); // Ensure no negative values
-  }
-
-  return data;
-}

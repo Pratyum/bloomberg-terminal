@@ -12,28 +12,30 @@ interface YahooHistoricalItem {
 }
 
 const MARKET_INDICES: Record<string, string> = {
-  "DOW JONES": "^DJI",
-  "S&P 500": "^GSPC",
-  NASDAQ: "^IXIC",
-  "S&P/TSX Comp": "^GSPTSE",
-  "S&P/BMV IPC": "^MXX",
-  IBOVESPA: "^BVSP",
-  "Euro Stoxx 50": "^STOXX50E",
-  "FTSE 100": "^FTSE",
-  "CAC 40": "^FCHI",
-  DAX: "^GDAXI",
-  "IBEX 35": "^IBEX",
-  "FTSE MIB": "FTSEMIB.MI",
-  "OMX STKH30": "^OMX",
-  "SWISS MKT": "^SSMI",
-  NIKKEI: "^N225",
-  "HANG SENG": "^HSI",
-  "CSI 300": "000300.SS",
-  "S&P/ASX 200": "^AXJO",
+  "NIFTY 50": "^NSEI",
+  SENSEX: "^BSESN",
+  "NIFTY BANK": "^NSEBANK",
+  "NIFTY IT": "^NSEMO",
+  "NIFTY AUTO": "^NIFTYAUTO",
+  "NIFTY PHARMA": "^NIFTYPHARMA",
+  "NIFTY METAL": "^NIFTYMETAL",
+  "NIFTY FMCG": "^NIFTYFMCG",
+  "NIFTY ENERGY": "^NIFTYENERGY",
+  "NIFTY REALTY": "^NIFTYREALTY",
+  "NIFTY COMMODITIES": "^NIFTYCOMMODITIES",
+  "NIFTY PSE": "^NIFTYPSE",
+  "NIFTY FIN SERVICE": "^NIFTYFINSERV",
+  "NIFTY MEDIA": "^NIFTYMEDIA",
+  "NIFTY PRIVATE BANK": "^NIFTYPRIVATEBANK",
+  "NIFTY PSU BANK": "^NIFTYPSUBANK",
+  "NIFTY GROWTH SECTOR 15": "^NIFTYGROWTHSECTOR15",
+  "NIFTY 100": "^NIFTY100",
+  "NIFTY MIDCAP 50": "^NIFTYMIDCAP50",
+  "NIFTY SMALLCAP 100": "^NIFTYSMALLCAP100",
 };
 
-export function generateRandomSparkline(): number[] {
-  return Array.from({ length: 8 }, () => Math.min(1, Math.max(0, Math.random())));
+export function generateRandomSparkline(): number[] | null {
+  return null;
 }
 
 export async function fetchQuote(symbol: string): Promise<YahooQuote | null> {
@@ -101,28 +103,7 @@ export async function fetchHistoricalData(
 }
 
 export function generateFallbackData(indexName: string, region: string, index: number) {
-  const value = 1000 + Math.random() * 10000;
-  const change = Math.random() * 100 - 50;
-  const pctChange = (change / value) * 100;
-
-  return {
-    id: indexName,
-    num: `${region === "americas" ? "1" : region === "emea" ? "2" : "3"}${index + 1})`,
-    rmi: "□",
-    value,
-    change,
-    pctChange,
-    avat: Math.random() * 100 - 50,
-    time: new Date().toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    }),
-    ytd: Math.random() * 30 - 15,
-    ytdCur: Math.random() * 30 - 10,
-    sparkline1: generateRandomSparkline(),
-    sparkline2: generateRandomSparkline(),
-  };
+  return null;
 }
 
 interface MarketIndexData {
@@ -132,17 +113,17 @@ interface MarketIndexData {
   value: number;
   change: number;
   pctChange: number;
-  avat: number;
+  avat: number | null;
   time: string;
-  ytd: number;
-  ytdCur: number;
-  sparkline1: number[];
-  sparkline2: number[];
+  ytd: number | null;
+  ytdCur: number | null;
+  sparkline1: number[] | null;
+  sparkline2: number[] | null;
   twoDayData?: { timestamp: string; close: number }[] | null;
 }
 
 export interface FetchAllMarketDataResult {
-  americas: MarketIndexData[];
+  india: MarketIndexData[];
   emea: MarketIndexData[];
   asiaPacific: MarketIndexData[];
   lastUpdated: string;
@@ -152,7 +133,28 @@ export interface FetchAllMarketDataResult {
 
 export async function fetchAllMarketData(): Promise<FetchAllMarketDataResult> {
   const regions = {
-    americas: ["DOW JONES", "S&P 500", "NASDAQ", "S&P/TSX Comp", "S&P/BMV IPC", "IBOVESPA"],
+    india: [
+      "NIFTY 50",
+      "SENSEX",
+      "NIFTY BANK",
+      "NIFTY IT",
+      "NIFTY AUTO",
+      "NIFTY PHARMA",
+      "NIFTY METAL",
+      "NIFTY FMCG",
+      "NIFTY ENERGY",
+      "NIFTY REALTY",
+      "NIFTY COMMODITIES",
+      "NIFTY PSE",
+      "NIFTY FIN SERVICE",
+      "NIFTY MEDIA",
+      "NIFTY PRIVATE BANK",
+      "NIFTY PSU BANK",
+      "NIFTY GROWTH SECTOR 15",
+      "NIFTY 100",
+      "NIFTY MIDCAP 50",
+      "NIFTY SMALLCAP 100",
+    ],
     emea: [
       "Euro Stoxx 50",
       "FTSE 100",
@@ -167,7 +169,7 @@ export async function fetchAllMarketData(): Promise<FetchAllMarketDataResult> {
   };
 
   const result: FetchAllMarketDataResult = {
-    americas: [],
+    india: [],
     emea: [],
     asiaPacific: [],
     lastUpdated: new Date().toISOString(),
@@ -192,42 +194,31 @@ export async function fetchAllMarketData(): Promise<FetchAllMarketDataResult> {
           const change = quote.regularMarketChange ?? 0;
           const pctChange = quote.regularMarketChangePercent ?? 0;
 
-          const avat = Math.random() * 100 - 50;
-          const ytd = Math.random() * 30 - 15;
-          const ytdCur = Math.random() * 30 - 10;
-
-          const sparkline1 = historicalData
-            ? historicalData.sparkline.slice(0, 8)
-            : generateRandomSparkline();
-          const sparkline2 = historicalData
-            ? historicalData.sparkline.slice(-8)
-            : generateRandomSparkline();
+          const sparkline1 = historicalData ? historicalData.sparkline.slice(0, 8) : null;
+          const sparkline2 = historicalData ? historicalData.sparkline.slice(-8) : null;
 
           result[regionKey].push({
             id: indexName,
-            num: `${region === "americas" ? "1" : region === "emea" ? "2" : "3"}${i + 1})`,
+            num: `${region === "india" ? "1" : region === "emea" ? "2" : "3"}${i + 1})`,
             rmi: "□",
             value,
             change,
             pctChange,
-            avat,
+            avat: null,
             time: new Date().toLocaleTimeString("en-US", {
               hour: "2-digit",
               minute: "2-digit",
               hour12: false,
             }),
-            ytd,
-            ytdCur,
+            ytd: null,
+            ytdCur: null,
             sparkline1,
             sparkline2,
             twoDayData: historicalData ? historicalData.raw : null,
           });
-        } else {
-          result[regionKey].push(generateFallbackData(indexName, region, i));
         }
       } catch (error) {
         console.error(`Error processing ${indexName}:`, error);
-        result[regionKey].push(generateFallbackData(indexName, region, i));
       }
 
       await new Promise((resolve) => setTimeout(resolve, 100));

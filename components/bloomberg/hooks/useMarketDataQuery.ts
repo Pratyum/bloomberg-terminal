@@ -3,7 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAtom } from "jotai";
 import { useCallback, useEffect, useRef } from "react";
-import { fetchMarketData, simulateMarketUpdate } from "../api/market-data";
+import { fetchMarketData } from "../api/market-data";
 import {
   dataSourceAtom,
   isFromRedisAtom,
@@ -30,7 +30,7 @@ export function useMarketDataQuery() {
   const [isFromRedis, setIsFromRedis] = useAtom(isFromRedisAtom);
 
   // Refs for tracking updates
-  const prevDataRef = useRef<MarketData | null>(null);
+  const prevDataRef = useRef<MarketData | null | undefined>(null);
 
   // Use React Query to fetch market data with appropriate polling
   const {
@@ -70,7 +70,7 @@ export function useMarketDataQuery() {
     const newUpdatedSparklines: Record<string, boolean> = {};
 
     // Compare with previous data to highlight changes
-    for (const region of ["americas", "emea", "asiaPacific"]) {
+    for (const region of ["india", "emea", "asiaPacific"]) {
       if (
         !oldData[region] ||
         !newData[region] ||
@@ -112,12 +112,12 @@ export function useMarketDataQuery() {
     setLastUpdated(new Date());
 
     // Update data source info if it exists
-    if (newData.source) {
-      setDataSource(newData.source);
+    if (newData.dataSource) {
+      setDataSource(newData.dataSource);
     }
 
-    if (newData.fromRedis !== undefined) {
-      setIsFromRedis(newData.fromRedis);
+    if (newData.isFromRedis !== undefined) {
+      setIsFromRedis(newData.isFromRedis);
     }
 
     // Update the previous data ref

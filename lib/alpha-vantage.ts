@@ -25,8 +25,8 @@ const MARKET_INDICES = {
 };
 
 // Helper function to generate random sparkline data
-export function generateRandomSparkline(): number[] {
-  return Array.from({ length: 8 }, () => Math.min(1, Math.max(0, Math.random())));
+export function generateRandomSparkline(): number[] | null {
+  return null;
 }
 
 // Fetch global quote for a symbol
@@ -118,28 +118,7 @@ export async function fetchIntradayData(symbol: string) {
 
 // Generate fallback data for a market index
 export function generateFallbackData(indexName: string, region: string, index: number) {
-  const value = 1000 + Math.random() * 10000;
-  const change = Math.random() * 100 - 50;
-  const pctChange = (change / value) * 100;
-
-  return {
-    id: indexName,
-    num: `${region === "americas" ? "1" : region === "emea" ? "2" : "3"}${index + 1})`,
-    rmi: "□",
-    value,
-    change,
-    pctChange,
-    avat: Math.random() * 100 - 50,
-    time: new Date().toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    }),
-    ytd: Math.random() * 30 - 15,
-    ytdCur: Math.random() * 30 - 10,
-    sparkline1: generateRandomSparkline(),
-    sparkline2: generateRandomSparkline(),
-  };
+  return null;
 }
 
 // Fetch market data for all indices
@@ -151,12 +130,12 @@ interface MarketIndexData {
   value: number;
   change: number;
   pctChange: number;
-  avat: number;
+  avat: number | null;
   time: string;
-  ytd: number;
-  ytdCur: number;
-  sparkline1: number[];
-  sparkline2: number[];
+  ytd: number | null;
+  ytdCur: number | null;
+  sparkline1: number[] | null;
+  sparkline2: number[] | null;
   twoDayData?: { timestamp: string; close: number }[] | null;
 }
 
@@ -206,9 +185,7 @@ export async function fetchAllMarketData(): Promise<FetchAllMarketDataResult> {
       try {
         // Check if we've reached API limit
         if (apiCalls >= MAX_API_CALLS) {
-          console.warn("API call limit reached, using fallback data for remaining indices");
-          // Add fallback data
-          result[regionKey].push(generateFallbackData(indexName, region, i));
+          console.warn("API call limit reached, skipping remaining indices");
           continue;
         }
 
@@ -231,18 +208,9 @@ export async function fetchAllMarketData(): Promise<FetchAllMarketDataResult> {
           const change = Number.parseFloat(quote["09. change"]);
           const pctChange = Number.parseFloat(quote["10. change percent"].replace("%", ""));
 
-          // Generate some random data for fields not provided by Alpha Vantage
-          const avat = Math.random() * 100 - 50;
-          const ytd = Math.random() * 30 - 15;
-          const ytdCur = Math.random() * 30 - 10;
-
-          // Use real intraday data if available, otherwise fallback to random
-          const sparkline1 = twoDayData
-            ? twoDayData.sparkline.slice(0, 8)
-            : generateRandomSparkline();
-          const sparkline2 = twoDayData
-            ? twoDayData.sparkline.slice(-8)
-            : generateRandomSparkline();
+          // Use real intraday data if available, otherwise null
+          const sparkline1 = twoDayData ? twoDayData.sparkline.slice(0, 8) : null;
+          const sparkline2 = twoDayData ? twoDayData.sparkline.slice(-8) : null;
 
           result[regionKey].push({
             id: indexName,
@@ -251,27 +219,22 @@ export async function fetchAllMarketData(): Promise<FetchAllMarketDataResult> {
             value,
             change,
             pctChange,
-            avat,
+            avat: null,
             time: new Date().toLocaleTimeString("en-US", {
               hour: "2-digit",
               minute: "2-digit",
               hour12: false,
             }),
-            ytd,
-            ytdCur,
+            ytd: null,
+            ytdCur: null,
             sparkline1,
             sparkline2,
             // Store the raw data for potential use
             twoDayData: twoDayData ? twoDayData.raw : null,
           });
-        } else {
-          // Add fallback data if API call failed
-          result[regionKey].push(generateFallbackData(indexName, region, i));
         }
       } catch (error) {
         console.error(`Error processing ${indexName}:`, error);
-        // Add fallback data on error
-        result[regionKey].push(generateFallbackData(indexName, region, i));
       }
 
       // Add a small delay between API calls to avoid rate limiting
