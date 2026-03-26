@@ -92,11 +92,8 @@ export async function GET() {
 }
 
 export async function POST() {
-  return NextResponse.json(
-    {
-      success: false,
-      error: "No real-time data available",
-    },
-    { status: 503 }
-  );
+  return NextResponse.json({
+    success: false,
+    error: "No real-time data available",
+  });
 }

@@ -92,7 +92,7 @@ export default function VolatilityView({
         for (const index of marketData.india) {
           result.push({
             id: index.id,
-            region: "Americas",
+            region: "India",
             historicalVol: null,
             impliedVol: null,
             volRatio: null,
@@ -281,7 +281,7 @@ export default function VolatilityView({
             onCheckedChange={() => handleRegionToggle("india")}
             className="h-3 w-3 rounded-none border-gray-500 data-[state=checked]:bg-gray-500"
           />
-          <label htmlFor="india-vol">Americas</label>
+          <label htmlFor="india-vol">India</label>
         </div>
         <div className="flex items-center gap-1">
           <Checkbox
@@ -343,6 +343,16 @@ export default function VolatilityView({
             ))}
         </BloombergButton>
       </div>
+
+      {/* Volatility Unavailable Banner */}
+      {volatilityData.length > 0 &&
+        volatilityData.every((v) => v.historicalVol === null && v.impliedVol === null) && (
+          <div className="px-2 py-2 bg-amber-900/20 border-b border-amber-600/30">
+            <p className="text-xs text-amber-600 font-mono">
+              Volatility metrics are currently unavailable. Showing market data only.
+            </p>
+          </div>
+        )}
 
       {/* Main Content */}
       <div className="overflow-x-auto">

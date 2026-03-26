@@ -134,8 +134,14 @@ export function MarketRow({
       >
         {showYTD ? (
           <span title={`Daily change: ${item.change > 0 ? "+" : ""}${item.change.toFixed(2)}`}>
-            {(item.ytd ?? 0) > 0 ? "+" : ""}
-            {(item.ytd ?? 0).toFixed(2)}%
+            {item.ytd != null ? (
+              <>
+                {item.ytd > 0 ? "+" : ""}
+                {item.ytd.toFixed(2)}%
+              </>
+            ) : (
+              "N/A"
+            )}
           </span>
         ) : typeof item.change === "number" ? (
           (item.change > 0 ? "+" : "") + item.change.toFixed(2)

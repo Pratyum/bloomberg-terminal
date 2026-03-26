@@ -32,11 +32,20 @@ const MARKET_INDICES: Record<string, string> = {
   "NIFTY 100": "^NIFTY100",
   "NIFTY MIDCAP 50": "^NIFTYMIDCAP50",
   "NIFTY SMALLCAP 100": "^NIFTYSMALLCAP100",
+  "Euro Stoxx 50": "^STOXX50E",
+  "FTSE 100": "^FTSE",
+  DAX: "^GDAXI",
+  "CAC 40": "^FCHI",
+  "IBEX 35": "^IBEX",
+  "FTSE MIB": "FTSEMIB.MI",
+  "OMX STKH30": "^OMXS30",
+  "SWISS MKT": "^SSMI",
+  "NIKKEI 225": "^N225",
+  "HANG SENG": "^HSI",
+  "CSI 300": "000300.SS",
+  "S&P/ASX 200": "^AXJO",
+  KOSPI: "^KS11",
 };
-
-export function generateRandomSparkline(): number[] | null {
-  return null;
-}
 
 export async function fetchQuote(symbol: string): Promise<YahooQuote | null> {
   try {
@@ -66,7 +75,7 @@ export async function fetchHistoricalData(
     const historical = (await yahooFinance.historical(symbol, {
       period1: startDate,
       period2: endDate,
-      interval: "1h",
+      interval: "1d",
     })) as YahooHistoricalItem[];
 
     if (historical && historical.length > 0) {
@@ -100,10 +109,6 @@ export async function fetchHistoricalData(
     console.error(`Error fetching historical data for ${symbol}:`, error);
     return null;
   }
-}
-
-export function generateFallbackData(indexName: string, region: string, index: number) {
-  return null;
 }
 
 interface MarketIndexData {

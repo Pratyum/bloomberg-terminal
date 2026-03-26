@@ -55,7 +55,7 @@ function shouldRefreshData(data: { lastFullRefresh?: string }): boolean {
 scheduler.register(
   "market-data-refresh",
   "Yahoo Finance Market Data Refresh",
-  24,
+  5,
   refreshMarketData
 );
 

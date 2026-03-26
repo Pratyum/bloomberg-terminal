@@ -24,11 +24,6 @@ const MARKET_INDICES = {
   "S&P/ASX 200": "^AXJO",
 };
 
-// Helper function to generate random sparkline data
-export function generateRandomSparkline(): number[] | null {
-  return null;
-}
-
 // Fetch global quote for a symbol
 export async function fetchGlobalQuote(symbol: string) {
   try {
@@ -114,11 +109,6 @@ export async function fetchIntradayData(symbol: string) {
     console.error("Error fetching intraday data:", error);
     return null;
   }
-}
-
-// Generate fallback data for a market index
-export function generateFallbackData(indexName: string, region: string, index: number) {
-  return null;
 }
 
 // Fetch market data for all indices

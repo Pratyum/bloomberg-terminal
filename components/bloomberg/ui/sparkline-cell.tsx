@@ -18,11 +18,21 @@ export function SparklineCell({ item, region, isDarkMode, isHighlighted }: Spark
   const [show10D] = useAtom(show10DAtom);
   const colors = isDarkMode ? bloombergColors.dark : bloombergColors.light;
 
-  const hasData = item.sparkline1 !== null && item.sparkline1 !== undefined;
+  const hasIntradayData = item.sparkline1 !== null && item.sparkline1 !== undefined;
+  const has10DData = item.historicalData10D !== null && item.historicalData10D !== undefined;
+  const hasData = show10D ? has10DData : hasIntradayData;
 
-  const displayData1 = show10D ? null : item.sparkline1 || null;
+  const displayData1 = show10D
+    ? item.historicalData10D
+      ? item.historicalData10D.slice(0, 8)
+      : null
+    : item.sparkline1 || null;
 
-  const displayData2 = show10D ? null : item.sparkline2 || null;
+  const displayData2 = show10D
+    ? item.historicalData10D
+      ? item.historicalData10D.slice(-8)
+      : null
+    : item.sparkline2 || null;
 
   if (!hasData) {
     return (

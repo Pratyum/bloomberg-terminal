@@ -77,7 +77,7 @@ export default function MarketMoversView({
 
     if (marketData?.india) {
       for (const index of marketData.india) {
-        allIndices.push({ ...index, region: "Americas" });
+        allIndices.push({ ...index, region: "India" });
       }
     }
 
@@ -205,7 +205,7 @@ export default function MarketMoversView({
             onCheckedChange={() => handleRegionToggle("india")}
             className="h-3 w-3 rounded-none border-gray-500 data-[state=checked]:bg-gray-500"
           />
-          <label htmlFor="india">Americas</label>
+          <label htmlFor="india">India</label>
         </div>
         <div className="flex items-center gap-1">
           <Checkbox

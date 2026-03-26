@@ -332,8 +332,6 @@ export function useMarketDataQuery() {
   const [dataSource] = useAtom(dataSourceAtom);
   const [isFromRedis] = useAtom(isFromRedisAtom);
 
-  // Create selectors for specific data views
-  const getAmericasData = useCallback(() => getRegionData("india"), [getRegionData]);
   const getEmeaData = useCallback(() => getRegionData("emea"), [getRegionData]);
   const getAsiaPacificData = useCallback(() => getRegionData("asiaPacific"), [getRegionData]);
 
@@ -351,7 +349,6 @@ export function useMarketDataQuery() {
     toggleRealTimeUpdates,
     refreshData,
     // Selectors for derived state
-    getAmericasData,
     getEmeaData,
     getAsiaPacificData,
     getRegionData,

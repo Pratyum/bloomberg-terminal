@@ -331,7 +331,11 @@ export function RmiView() {
                     </tr>
                     <tr>
                       <td className="py-1 font-medium">YTD:</td>
-                      <td>{(selectedSecurityData.ytd ?? 0).toFixed(2)}%</td>
+                      <td>
+                        {selectedSecurityData.ytd != null
+                          ? `${selectedSecurityData.ytd.toFixed(2)}%`
+                          : "—"}
+                      </td>
                     </tr>
                     <tr>
                       <td className="py-1 font-medium">RMI:</td>
