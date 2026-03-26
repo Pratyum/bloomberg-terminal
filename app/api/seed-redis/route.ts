@@ -1,26 +1,24 @@
 import { marketData as fallbackData } from "@/components/bloomberg/lib/marketData";
-import { fetchAllMarketData, generateRandomSparkline } from "@/lib/alpha-vantage";
-import { redis } from "@/lib/redis";
-import { NextResponse } from "next/server";
 import type { MarketData, MarketItem } from "@/components/bloomberg/types";
+import { redis } from "@/lib/redis";
+import { fetchAllMarketData, generateRandomSparkline } from "@/lib/yahoo-finance";
+import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
     console.log("Seeding Redis with market data...");
 
-    // Try to fetch data from Alpha Vantage
     let marketData: MarketData;
     try {
       marketData = await fetchAllMarketData();
 
-      // Check if we got enough data
       const totalIndices =
         marketData.americas.length + marketData.emea.length + marketData.asiaPacific.length;
       if (totalIndices < 5) {
-        throw new Error("Not enough data received from Alpha Vantage");
+        throw new Error("Not enough data received from Yahoo Finance");
       }
     } catch (error) {
-      console.warn("Error fetching from Alpha Vantage, using fallback data:", error);
+      console.warn("Error fetching from Yahoo Finance, using fallback data:", error);
 
       // Use fallback data with sparklines
       marketData = Object.keys(fallbackData).reduce(

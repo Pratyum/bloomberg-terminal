@@ -1,8 +1,8 @@
 import { marketData as fallbackData } from "@/components/bloomberg/lib/marketData";
 import type { MarketData, MarketItem } from "@/components/bloomberg/types";
-import { generateRandomSparkline } from "@/lib/alpha-vantage";
 import refreshMarketData from "@/lib/market-data-refresh";
 import { redis } from "@/lib/redis";
+import { generateRandomSparkline } from "@/lib/yahoo-finance";
 import { NextResponse } from "next/server";
 
 // Initialize the market data refresh scheduler
