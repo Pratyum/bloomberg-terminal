@@ -61,8 +61,8 @@ export async function fetchQuote(symbol: string): Promise<YahooQuote | null> {
 
 interface HistoricalDataResult {
   raw: { timestamp: string; close: number }[];
-  normalized: { timestamp: string; value: number }[];
-  sparkline: number[];
+  normalized: { timestamp: string; value: number }[] | null;
+  sparkline: number[] | null;
 }
 
 export async function fetchHistoricalData(
@@ -90,6 +90,14 @@ export async function fetchHistoricalData(
           timestamp: item.date.toISOString(),
           close: item.close,
         }));
+
+      if (sortedData.length < 2) {
+        return {
+          raw: sortedData,
+          normalized: null,
+          sparkline: null,
+        };
+      }
 
       const values = sortedData.map((item) => item.close);
       const min = Math.min(...values);
@@ -172,7 +180,7 @@ export async function fetchAllMarketData(): Promise<FetchAllMarketDataResult> {
       "OMX STKH30",
       "SWISS MKT",
     ],
-    asiaPacific: ["NIKKEI", "HANG SENG", "CSI 300", "S&P/ASX 200"],
+    asiaPacific: ["NIKKEI 225", "HANG SENG", "CSI 300", "S&P/ASX 200"],
   };
 
   const result: FetchAllMarketDataResult = {
@@ -201,8 +209,10 @@ export async function fetchAllMarketData(): Promise<FetchAllMarketDataResult> {
           const change = quote.regularMarketChange ?? 0;
           const pctChange = quote.regularMarketChangePercent ?? 0;
 
-          const sparkline1 = historicalData ? historicalData.sparkline.slice(0, 8) : null;
-          const sparkline2 = historicalData ? historicalData.sparkline.slice(-8) : null;
+          const sparkline1 = historicalData?.sparkline
+            ? historicalData.sparkline.slice(0, 8)
+            : null;
+          const sparkline2 = historicalData?.sparkline ? historicalData.sparkline.slice(-8) : null;
 
           result[regionKey].push({
             id: indexName,

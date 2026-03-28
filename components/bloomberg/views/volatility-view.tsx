@@ -83,6 +83,11 @@ export default function VolatilityView({
 
   const colors = isDarkMode ? bloombergColors.dark : bloombergColors.light;
 
+  // Normalize region names to match state keys
+  const normalizeRegionKey = (region: string): string => {
+    return region.toLowerCase().replace(/[^a-z]/g, "");
+  };
+
   // Calculate volatility metrics from market data
   useEffect(() => {
     const calculateVolatilityData = (): VolatilityData[] => {
@@ -160,7 +165,8 @@ export default function VolatilityView({
     return volatilityData
       .filter((item) => {
         // Filter by region
-        if (!showRegions[item.region.toLowerCase()]) {
+        const normalizedKey = normalizeRegionKey(item.region);
+        if (!showRegions[normalizedKey]) {
           return false;
         }
 
@@ -209,8 +215,8 @@ export default function VolatilityView({
   };
 
   // Get color class based on volatility level
-  const getVolatilityColorClass = (vol: number | null) => {
-    if (vol === null) return "text-gray-500";
+  const getVolatilityColorClass = (vol: number | null | undefined) => {
+    if (vol === null || vol === undefined) return "text-gray-500";
     if (vol >= 25) return `text-[${colors.negative}] font-bold`;
     if (vol >= 15) return `text-[${colors.negative}]`;
     if (vol >= 10) return `text-[${colors.accent}]`;
@@ -404,7 +410,7 @@ export default function VolatilityView({
                     {item.historicalVol !== null ? `${item.historicalVol.toFixed(2)}%` : "N/A"}
                   </TableCell>
                   <TableCell
-                    className={`px-2 py-1 text-right text-xs ${getVolatilityColorClass(item.impliedVol ?? 0)}`}
+                    className={`px-2 py-1 text-right text-xs ${getVolatilityColorClass(item.impliedVol)}`}
                   >
                     {item.impliedVol !== undefined && item.impliedVol !== null
                       ? `${item.impliedVol.toFixed(2)}%`

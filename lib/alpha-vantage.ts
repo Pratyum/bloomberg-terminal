@@ -199,8 +199,19 @@ export async function fetchAllMarketData(): Promise<FetchAllMarketDataResult> {
           const pctChange = Number.parseFloat(quote["10. change percent"].replace("%", ""));
 
           // Use real intraday data if available, otherwise null
-          const sparkline1 = twoDayData ? twoDayData.sparkline.slice(0, 8) : null;
-          const sparkline2 = twoDayData ? twoDayData.sparkline.slice(-8) : null;
+          let sparkline1: number[] | null = null;
+          let sparkline2: number[] | null = null;
+          if (twoDayData) {
+            const len = twoDayData.sparkline.length;
+            if (len >= 16) {
+              sparkline1 = twoDayData.sparkline.slice(0, 8);
+              sparkline2 = twoDayData.sparkline.slice(-8);
+            } else {
+              const mid = Math.floor(len / 2);
+              sparkline1 = twoDayData.sparkline.slice(0, mid);
+              sparkline2 = twoDayData.sparkline.slice(mid);
+            }
+          }
 
           result[regionKey].push({
             id: indexName,
