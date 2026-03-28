@@ -15,7 +15,7 @@ Example:
 ```bash
 git checkout -b feat/your-feature-name
 # OR
-git worktree add ../bloomberg-terminal-feature your-feature-name
+git worktree add -b your-feature-name ../bloomberg-terminal-feature
 ```
 
 ### 2. During Development

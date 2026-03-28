@@ -21,12 +21,12 @@ Bloomberg Terminal Clone - A Next.js 15 application for real-time financial data
    ```bash
    git checkout -b feat/feature-name
    # OR
-   git worktree add ../bloomberg-terminal-feature feature-name
+   git worktree add -b feature-name ../bloomberg-terminal-feature
    ```
 
 2. **NEVER** work on `main` or `master` branch directly
 
-3. When完成任务:
+3. When task is complete:
    - Push branch: `git push -u origin branch-name`
    - Create PR: `gh pr create --title "..." --body "..."`
    - Comment PR link on Paperclip ticket
