@@ -47,7 +47,37 @@ OPENAI_API_KEY=your_openai_api_key
 
 # Allowed origins for API access (comma-separated list, no spaces)
 ALLOWED_ORIGINS=https://your-domain.com,http://localhost:3000
+
+# Supabase (for persistent data storage)
+# Obtain these from your Supabase project dashboard:
+# - URL: Project Settings > API > Project URL
+# - Anon Key: Project Settings > API > anon public key
+# - Service Role Key: Project Settings > API > service_role key (keep secret!)
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key-here
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key-here
 ```
+
+### Supabase Setup
+
+1. **Create a Supabase project** at [supabase.com](https://supabase.com)
+2. **Get your credentials**:
+   - Go to **Project Settings > API**
+   - Copy the **Project URL** and **anon public key**
+   - Copy the **service_role key** (click "Reveal" to see it)
+3. **Add to `.env.local`**:
+   ```
+   NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key-here
+   SUPABASE_SERVICE_ROLE_KEY=your-service-role-key-here
+   ```
+4. **Run the migration**: Execute the SQL in `supabase/migrations/001_initial_schema.sql` in your Supabase SQL Editor
+
+**Production Deployment**: Add these environment variables in your hosting provider's settings (e.g., Vercel Project Settings > Environment Variables). Ensure `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are configured.
+
+**Troubleshooting**:
+- If you see "Supabase environment variables are not set" warnings, ensure your `.env.local` file is in the project root
+- If database operations fail, verify the RLS policies allow the required operations or use the service-role client for server-side operations
 
 ## Project Structure
 
