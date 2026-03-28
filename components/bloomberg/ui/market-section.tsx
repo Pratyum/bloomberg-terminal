@@ -47,7 +47,7 @@ export function MarketSection({
   // Only show items with significant volatility if the filter is active
   // We consider an item volatile if its AVAT value is high (> 10 or < -10)
   if (showVolatility) {
-    filteredItems = filteredItems.filter((item) => Math.abs(item.avat) > 10.0);
+    filteredItems = filteredItems.filter((item) => Math.abs(item.avat ?? 0) > 10.0);
   }
 
   // Only show ratio items if the filter is active
@@ -58,7 +58,7 @@ export function MarketSection({
         // Consider major indices as ratio items for demonstration purposes
         ["S&P", "DOW", "NASDAQ", "FTSE"].some((term) => item.id.includes(term)) ||
         // Items with specific P/E ratio characteristics (using ytd as a proxy)
-        Math.abs(item.ytd) > 10.0
+        Math.abs(item.ytd ?? 0) > 10.0
     );
   }
 
@@ -70,7 +70,7 @@ export function MarketSection({
         // Consider these specific indices as futures-related for demonstration
         ["DAX", "CAC", "IBEX", "NIKKEI", "HANG SENG"].some((term) => item.id.includes(term)) ||
         // Items with specific characteristics (using avat as a proxy)
-        Math.abs(item.avat) > 20.0
+        Math.abs(item.avat ?? 0) > 20.0
     );
   }
 

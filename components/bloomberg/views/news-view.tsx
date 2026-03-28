@@ -1,6 +1,6 @@
 "use client";
 
-import { fetchFinancialNews } from "@/lib/alpha-vantage";
+import { fetchFinancialNews } from "@/lib/google-news";
 import { ArrowLeft, ExternalLink, RefreshCw } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { BloombergButton } from "../core/bloomberg-button";
@@ -10,13 +10,8 @@ interface NewsItem {
   title: string;
   summary: string;
   url: string;
-  time_published: string;
-  authors?: string[];
-  banner_image?: string;
+  publishedAt: string;
   source: string;
-  category_within_source?: string;
-  source_domain: string;
-  topics?: Array<{ topic: string; relevance_score: string }>;
 }
 
 interface NewsViewProps {
@@ -53,30 +48,9 @@ export default function NewsView({ isDarkMode, onBack }: NewsViewProps) {
   );
 
   const formatPublishedTime = (timeString: string) => {
-    // The Alpha Vantage API returns dates in YYYYMMDDTHHMMSS format.
-    // We need to parse this custom format, as new Date() cannot handle it directly.
-    const alphaVantageFormat = /^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})$/;
-    const match = timeString.match(alphaVantageFormat);
-    let date: Date;
-    if (match) {
-      // If it matches the Alpha Vantage format, parse it manually.
-      const [, year, month, day, hour, minute, second] = match;
-      // Note: The month is 0-indexed in the JavaScript Date constructor (0-11).
-      date = new Date(
-        Number(year),
-        Number(month) - 1,
-        Number(day),
-        Number(hour),
-        Number(minute),
-        Number(second)
-      );
-    } else {
-      // Otherwise, assume it's a standard format.
-      date = new Date(timeString);
-    }
-    // Check if the resulting date is valid before formatting.
+    const date = new Date(timeString);
     if (Number.isNaN(date.getTime())) {
-      return "Invalid Date";
+      return timeString;
     }
     return date.toLocaleString();
   };
@@ -137,7 +111,7 @@ export default function NewsView({ isDarkMode, onBack }: NewsViewProps) {
                 <p className="text-xs mb-2">{item.summary}</p>
                 <div className="flex justify-between text-xs text-gray-500">
                   <span>{item.source}</span>
-                  <span>{formatPublishedTime(item.time_published)}</span>
+                  <span>{formatPublishedTime(item.publishedAt)}</span>
                 </div>
               </div>
             ))}

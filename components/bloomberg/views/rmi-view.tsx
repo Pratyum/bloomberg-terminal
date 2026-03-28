@@ -41,7 +41,7 @@ export function RmiView() {
   const [timeRange, setTimeRange] = useAtom(rmiTimeRangeAtom);
 
   // Get all available securities for the selected region
-  const securities: MarketItem[] = marketData[selectedRegion] || [];
+  const securities: MarketItem[] = marketData?.[selectedRegion] || [];
 
   useEffect(() => {
     const availableBenchmarks = securities.filter((item) => item.id !== selectedSecurity);
@@ -130,7 +130,7 @@ export function RmiView() {
             <Select
               value={selectedRegion}
               onValueChange={(value) =>
-                setSelectedRegion(value as "americas" | "emea" | "asiaPacific")
+                setSelectedRegion(value as "india" | "emea" | "asiaPacific")
               }
             >
               <SelectTrigger
@@ -153,10 +153,10 @@ export function RmiView() {
                 }}
               >
                 <SelectItem
-                  value="americas"
+                  value="india"
                   className="rounded-none focus:bg-[#333333] focus:text-white"
                 >
-                  AMERICAS
+                  INDIA
                 </SelectItem>
                 <SelectItem
                   value="emea"
@@ -331,7 +331,11 @@ export function RmiView() {
                     </tr>
                     <tr>
                       <td className="py-1 font-medium">YTD:</td>
-                      <td>{selectedSecurityData.ytd.toFixed(2)}%</td>
+                      <td>
+                        {selectedSecurityData.ytd != null
+                          ? `${selectedSecurityData.ytd.toFixed(2)}%`
+                          : "—"}
+                      </td>
                     </tr>
                     <tr>
                       <td className="py-1 font-medium">RMI:</td>

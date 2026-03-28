@@ -146,7 +146,7 @@ export function TerminalHeader({
             <AlertTriangle className="h-3 w-3 text-yellow-500" />
           )}
           <span className={isFromRedis ? "text-green-500" : "text-yellow-500"}>
-            {dataSource === "alpha-vantage" ? "API" : isFromRedis ? "Redis" : "Local"}
+            {dataSource === "yahoo-finance" ? "API" : isFromRedis ? "Redis" : "Local"}
           </span>
           {getDataFreshnessIndicator()}
           {lastUpdated && <span className="text-gray-400">{lastUpdated.toLocaleTimeString()}</span>}

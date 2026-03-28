@@ -72,8 +72,8 @@ export default function BloombergTerminal() {
   // Get all market indices for watchlist
   const allMarketIndices = useCallback(() => {
     const indices: string[] = [];
-    if (data?.americas) {
-      for (const item of data.americas) {
+    if (data?.india) {
+      for (const item of data.india) {
         indices.push(item.id);
       }
     }

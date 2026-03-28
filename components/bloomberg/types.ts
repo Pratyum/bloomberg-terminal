@@ -6,12 +6,12 @@ export type MarketItem = {
   value: number;
   change: number;
   pctChange: number;
-  avat: number;
+  avat: number | null;
   time: string;
-  ytd: number;
-  ytdCur: number;
-  sparkline1?: number[];
-  sparkline2?: number[];
+  ytd: number | null;
+  ytdCur: number | null;
+  sparkline1?: number[] | null;
+  sparkline2?: number[] | null;
   sparklineUpdated?: string;
   lastUpdated?: string;
   // Additional properties for filters
@@ -21,14 +21,14 @@ export type MarketItem = {
 };
 
 export type MarketData = {
-  americas: MarketItem[];
+  india: MarketItem[];
   emea: MarketItem[];
   asiaPacific: MarketItem[];
   lastUpdated?: string;
   lastSparklineUpdate?: string;
   isFromRedis?: boolean;
   dataSource?: string;
-  [key: string]: MarketItem[] | string | boolean | undefined; // Type-safe index signature for dynamic access
+  [key: string]: MarketItem[] | string | boolean | undefined;
 };
 
 export interface FilterState {
