@@ -3,3 +3,4 @@ export * from "./market-movers-view";
 export * from "./news-view";
 export * from "./volatility-view";
 export * from "./rmi-view";
+export * from "./holdings-view";

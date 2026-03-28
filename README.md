@@ -7,9 +7,10 @@ Clone of the Bloomberg Terminal built with Next.js 15, React 19, and TypeScript.
 ## Features
 
 - **Real-time Market Data**: Simulated market updates with configurable refresh rates
-- **Multiple Views**: Market data, news, market movers, and volatility analysis
+- **Multiple Views**: Market data, news, market movers, volatility analysis, and holdings
 - **Interactive UI**: Terminal-like interface with keyboard shortcuts
 - **Watchlist**: Create and manage lists of financial instruments
+- **Portfolio Holdings**: Connect your KITE (Zerodha) account to view your holdings
 - **Dark/Light Mode**: Toggle between color schemes
 - **Responsive Design**: Works on desktop and tablet devices
 
@@ -44,6 +45,11 @@ ALPHA_VANTAGE_API_KEY=your_alpha_vantage_api_key
 
 # OpenAI API key for AI features
 OPENAI_API_KEY=your_openai_api_key
+
+# KITE API credentials for portfolio holdings (optional)
+# Get your API key from https://kite.trade/connect/login
+KITE_API_KEY=your_kite_api_key
+KITE_API_SECRET=your_kite_api_secret
 
 # Allowed origins for API access (comma-separated list, no spaces)
 ALLOWED_ORIGINS=https://your-domain.com,http://localhost:3000

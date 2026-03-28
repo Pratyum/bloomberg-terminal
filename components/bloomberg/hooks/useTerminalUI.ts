@@ -34,6 +34,10 @@ export function useTerminalUI() {
     setCurrentView("rmi");
   }, [setCurrentView]);
 
+  const handleHoldingsView = useCallback(() => {
+    setCurrentView("holdings");
+  }, [setCurrentView]);
+
   // Other UI handlers
   const handleCancelClick = useCallback(() => {
     console.log("Cancel clicked");
@@ -78,6 +82,7 @@ export function useTerminalUI() {
     handleMoversView,
     handleVolatilityView,
     handleRmiView,
+    handleHoldingsView,
     handleCancelClick,
     handleNewClick,
     handleBlancClick,
