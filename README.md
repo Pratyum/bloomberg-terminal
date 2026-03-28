@@ -98,6 +98,13 @@ Components are organized based on:
 - **Response Limiting**: AI responses are limited in token count to prevent excessive usage
 - **Environment Variables**: Sensitive keys are stored in environment variables and not exposed to the client
 
+## Contributing
+
+This project uses AI-assisted development. Please refer to the following files for contribution guidelines:
+
+- [AGENTS.md](./AGENTS.md) - Agent workflow instructions
+- [CLAUDE.md](./CLAUDE.md) - AI assistant context and conventions
+
 ## License
 
 MIT
