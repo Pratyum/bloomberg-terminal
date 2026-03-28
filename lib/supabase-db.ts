@@ -1,4 +1,5 @@
 import { supabase } from "./supabase";
+import { supabaseAdmin } from "./supabase-service";
 
 export interface MarketData {
   nifty50: unknown[];
@@ -25,7 +26,7 @@ export const supabaseDb = {
   },
 
   async setMarketData(marketData: MarketData, expirySeconds?: number): Promise<boolean> {
-    const { error } = await supabase.from("market_data").insert([
+    const { error } = await supabaseAdmin.from("market_data").insert([
       {
         data: marketData,
         created_at: new Date().toISOString(),
@@ -35,7 +36,7 @@ export const supabaseDb = {
 
     if (error) {
       console.error("Failed to set market data:", error);
-      return false;
+      throw new Error(`Failed to set market data: ${error.message}`);
     }
 
     return true;
@@ -49,7 +50,7 @@ export const supabaseDb = {
     }
 
     if (new Date(data.expires_at) < new Date()) {
-      await supabase.from("rate_limits").delete().eq("key", key);
+      await supabaseAdmin.from("rate_limits").delete().eq("key", key);
       return null;
     }
 
@@ -63,51 +64,23 @@ export const supabaseDb = {
     key: string,
     windowSeconds: number
   ): Promise<{ count: number; expiresAt: Date }> {
-    const existing = await this.getRateLimit(key);
-
-    if (existing) {
-      const { data, error } = await supabase
-        .from("rate_limits")
-        .update({
-          count: existing.count + 1,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("key", key)
-        .select()
-        .single();
-
-      if (error) {
-        console.error("Failed to increment rate limit:", error);
-      }
-
-      return {
-        count: existing.count + 1,
-        expiresAt: existing.expiresAt,
-      };
-    }
-
-    const expiresAt = new Date(Date.now() + windowSeconds * 1000);
-    const { data, error } = await supabase
-      .from("rate_limits")
-      .insert([
-        {
-          key,
-          count: 1,
-          expires_at: expiresAt.toISOString(),
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        },
-      ])
-      .select()
-      .single();
+    const { data, error } = await supabaseAdmin.rpc("increment_rate_limit", {
+      p_key: key,
+      p_window_seconds: windowSeconds,
+    });
 
     if (error) {
-      console.error("Failed to create rate limit:", error);
+      console.error("Failed to increment rate limit:", error);
+      throw new Error(`Failed to increment rate limit: ${error.message}`);
+    }
+
+    if (!data) {
+      throw new Error("Failed to increment rate limit: no data returned");
     }
 
     return {
-      count: 1,
-      expiresAt,
+      count: data.count,
+      expiresAt: new Date(data.expires_at),
     };
   },
 };
