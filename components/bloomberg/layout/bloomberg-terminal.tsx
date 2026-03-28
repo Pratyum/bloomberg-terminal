@@ -23,6 +23,7 @@ import { TerminalFilterBar } from "../layout/terminal-filter-bar";
 import { TerminalHeader } from "../layout/terminal-header";
 import { TerminalLayout } from "../layout/terminal-layout";
 import type { FilterState, MarketItem } from "../types";
+import HoldingsView from "../views/holdings-view";
 import MarketMoversView from "../views/market-movers-view";
 import { MarketView } from "../views/market-view";
 import NewsView from "../views/news-view";
@@ -45,6 +46,7 @@ export default function BloombergTerminal() {
     handleMoversView,
     handleVolatilityView,
     handleRmiView,
+    handleHoldingsView,
     handleCancelClick,
     handleNewClick,
     handleBlancClick,
@@ -236,6 +238,15 @@ export default function BloombergTerminal() {
     );
   }
 
+  // Add the condition for the holdings view
+  if (currentView === "holdings") {
+    return (
+      <TerminalLayout shortcuts={shortcuts}>
+        <HoldingsView isDarkMode={isDarkMode} onBack={handleBackFromView} />
+      </TerminalLayout>
+    );
+  }
+
   return (
     <TerminalLayout shortcuts={shortcuts}>
       <TerminalHeader
@@ -247,6 +258,7 @@ export default function BloombergTerminal() {
         onMoversClick={handleMoversView}
         onVolatilityClick={handleVolatilityView}
         onRmiClick={handleRmiView}
+        onHoldingsClick={handleHoldingsView}
         onHelpClick={handleHelpClick}
         onThemeToggle={handleThemeToggle}
       />

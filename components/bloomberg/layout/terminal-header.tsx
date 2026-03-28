@@ -26,6 +26,7 @@ type TerminalHeaderProps = {
   onMoversClick: () => void;
   onVolatilityClick: () => void;
   onRmiClick: () => void;
+  onHoldingsClick: () => void;
   onHelpClick: () => void;
   onThemeToggle: () => void;
 };
@@ -39,6 +40,7 @@ export function TerminalHeader({
   onMoversClick,
   onVolatilityClick,
   onRmiClick,
+  onHoldingsClick,
   onHelpClick,
   onThemeToggle,
 }: TerminalHeaderProps) {
@@ -109,6 +111,10 @@ export function TerminalHeader({
       <BloombergButton color="green" onClick={onRmiClick}>
         <Activity className="h-3 w-3 mr-1" />
         RMI
+      </BloombergButton>
+      <BloombergButton color="green" onClick={onHoldingsClick}>
+        <Database className="h-3 w-3 mr-1" />
+        HOLDINGS
       </BloombergButton>
 
       <BloombergButton color="accent" onClick={onHelpClick}>

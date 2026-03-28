@@ -20,6 +20,24 @@ export type MarketItem = {
   isMover?: boolean;
 };
 
+export type HoldingsItem = {
+  trading_symbol: string;
+  exchange: string;
+  instrument_token: number;
+  isin: string;
+  quantity: number;
+  average_price: number;
+  last_price: number;
+  current_value: number;
+  pnl: number;
+  pnl_percent: number;
+  product: string;
+  quote?: {
+    price: number;
+    change: number;
+  };
+};
+
 export type MarketData = {
   india: MarketItem[];
   emea: MarketItem[];
