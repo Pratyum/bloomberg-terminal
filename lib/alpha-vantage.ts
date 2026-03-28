@@ -175,8 +175,7 @@ export async function fetchAllMarketData(): Promise<FetchAllMarketDataResult> {
       try {
         // Check if we've reached API limit
         if (apiCalls >= MAX_API_CALLS) {
-          console.warn("API call limit reached, skipping remaining indices");
-          continue;
+          throw new Error("API call limit reached while fetching market data");
         }
 
         const symbol = MARKET_INDICES[indexName as keyof typeof MARKET_INDICES];

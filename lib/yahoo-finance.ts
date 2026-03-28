@@ -199,6 +199,11 @@ export async function fetchAllMarketData(): Promise<FetchAllMarketDataResult> {
       try {
         const symbol = MARKET_INDICES[indexName];
 
+        if (!symbol) {
+          console.warn(`No symbol found for index: ${indexName}`);
+          continue;
+        }
+
         const [quote, historicalData] = await Promise.all([
           fetchQuote(symbol),
           fetchHistoricalData(symbol),

@@ -81,12 +81,17 @@ export default function VolatilityView({
     asiaPacific: true,
   });
 
-  const colors = isDarkMode ? bloombergColors.dark : bloombergColors.light;
-
-  // Normalize region names to match state keys
-  const normalizeRegionKey = (region: string): string => {
-    return region.toLowerCase().replace(/[^a-z]/g, "");
+  const regionLabelToKey: Record<string, string> = {
+    India: "india",
+    EMEA: "emea",
+    "Asia/Pacific": "asiaPacific",
   };
+
+  const normalizeRegionKey = (region: string): string => {
+    return regionLabelToKey[region] ?? region.toLowerCase().replace(/[^a-z]/g, "");
+  };
+
+  const colors = isDarkMode ? bloombergColors.dark : bloombergColors.light;
 
   // Calculate volatility metrics from market data
   useEffect(() => {
@@ -171,11 +176,15 @@ export default function VolatilityView({
         }
 
         // Filter by volatility level
-        if (filterType === "high" && (item.historicalVol ?? 0) < 15) {
-          return false;
+        if (filterType === "high") {
+          if (item.historicalVol == null || item.historicalVol < 15) {
+            return false;
+          }
         }
-        if (filterType === "low" && (item.historicalVol ?? 0) >= 15) {
-          return false;
+        if (filterType === "low") {
+          if (item.historicalVol == null || item.historicalVol >= 15) {
+            return false;
+          }
         }
 
         return true;
