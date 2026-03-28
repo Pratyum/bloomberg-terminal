@@ -8,9 +8,9 @@ interface YahooQuote {
   regularMarketChangePercent: number | null;
 }
 
-interface YahooHistoricalItem {
+interface ChartQuoteItem {
   date: Date;
-  close: number;
+  close: number | null;
 }
 
 const MARKET_INDICES: Record<string, string> = {
@@ -74,21 +74,23 @@ export async function fetchHistoricalData(
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - days);
 
-    const historical = (await yahooFinance.historical(symbol, {
+    const chartResult = (await yahooFinance.chart(symbol, {
       period1: startDate,
       period2: endDate,
       interval: "1d",
-    })) as YahooHistoricalItem[];
+    })) as { quotes: ChartQuoteItem[] };
 
-    if (historical && historical.length > 0) {
-      const sortedData = historical
+    const quotes = chartResult?.quotes?.filter((q) => q.close !== null) ?? [];
+
+    if (quotes && quotes.length > 0) {
+      const sortedData = quotes
         .sort(
-          (a: YahooHistoricalItem, b: YahooHistoricalItem) =>
+          (a: ChartQuoteItem, b: ChartQuoteItem) =>
             new Date(a.date).getTime() - new Date(b.date).getTime()
         )
-        .map((item: YahooHistoricalItem) => ({
+        .map((item: ChartQuoteItem) => ({
           timestamp: item.date.toISOString(),
-          close: item.close,
+          close: item.close as number,
         }));
 
       if (sortedData.length < 2) {
